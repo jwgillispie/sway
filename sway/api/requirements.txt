@@ -1,0 +1,19 @@
+# api/requirements.txt
+# FastAPI and ASGI server
+fastapi>=0.95.0
+uvicorn[standard]>=0.21.1
+
+# Database
+beanie>=1.17.0
+motor>=3.1.1
+pymongo>=4.3.3
+
+# Authentication
+firebase-admin>=6.1.0
+python-jose[cryptography]>=3.3.0
+python-multipart>=0.0.6
+
+# Utilities
+pydantic>=1.10.7
+python-dotenv>=1.0.0
+httpx>=0.23.3

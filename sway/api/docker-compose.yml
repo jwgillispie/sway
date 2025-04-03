@@ -1,0 +1,33 @@
+# api/docker-compose.yml
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - MONGODB_URL=mongodb://mongo:27017/hammock_spots
+      - FIREBASE_CREDENTIALS=/app/firebase-credentials.json
+    depends_on:
+      - mongo
+    networks:
+      - hammock-network
+
+  mongo:
+    image: mongo:5.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - hammock-network
+
+networks:
+  hammock-network:
+    driver: bridge
+
+volumes:
+  mongo-data:

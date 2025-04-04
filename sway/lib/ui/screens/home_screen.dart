@@ -1,10 +1,10 @@
-# lib/ui/screens/home_screen.dart
+//lib/ui/screens/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sway/blocs/auth/auth_bloc.dart';
 import 'package:sway/config/routes.dart';
+import 'package:sway/ui/screens/explore_screens.dart';
 import 'package:sway/ui/screens/map_screen.dart';
-import 'package:sway/ui/screens/explore_screen.dart';
 import 'package:sway/ui/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {

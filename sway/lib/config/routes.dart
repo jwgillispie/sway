@@ -1,14 +1,14 @@
 // lib/config/routes.dart
 import 'package:flutter/material.dart';
+import 'package:sway/ui/screens/add_spot_screen.dart';
+import 'package:sway/ui/screens/settings_screen.dart';
 import 'package:sway/ui/screens/splash_screen.dart';
 import 'package:sway/ui/screens/auth/login_screen.dart';
 import 'package:sway/ui/screens/auth/register_screen.dart';
 import 'package:sway/ui/screens/home_screen.dart';
 import 'package:sway/ui/screens/map_screen.dart';
-import 'package:sway/ui/screens/spot_detail_screen.dart';
-import 'package:sway/ui/screens/add_spot_screen.dart';
 import 'package:sway/ui/screens/profile_screen.dart';
-import 'package:sway/ui/screens/settings_screen.dart';
+import 'package:sway/ui/screens/spots_detail_screen.dart';
 
 class Routes {
   // Route names
@@ -24,15 +24,15 @@ class Routes {
   
   // Route map
   static final Map<String, WidgetBuilder> routes = {
-    splash: (context) => SplashScreen(),
-    login: (context) => LoginScreen(),
-    register: (context) => RegisterScreen(),
-    home: (context) => HomeScreen(),
-    map: (context) => MapScreen(),
-    spotDetail: (context) => SpotDetailScreen(),
-    addSpot: (context) => AddSpotScreen(),
-    profile: (context) => ProfileScreen(),
-    settings: (context) => SettingsScreen(),
+    splash: (context) => const SplashScreen(),
+    login: (context) => const LoginScreen(),
+    register: (context) => const RegisterScreen(),
+    home: (context) => const HomeScreen(),
+    map: (context) => const MapScreen(),
+    addSpot: (context) => const AddSpotScreen(),
+    profile: (context) => const ProfileScreen(),
+    settings: (context) => const SettingsScreen(),
+    // spotDetail is handled by generateRoute
   };
   
   // Route generator for dynamic routes with parameters

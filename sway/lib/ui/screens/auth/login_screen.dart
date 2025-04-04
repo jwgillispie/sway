@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(height: 8),
                         Text(
                           'Find your perfect hammock spot',
-                          style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          style: Theme.of(context).textTheme.displayMedium?.copyWith(
                             color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
                           ),
                         ),

@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sway/ui/widgets/filter_sheet.dart';
 import '../../blocs/spots/spots_bloc.dart';
 import '../../data/models/hammock_spot.dart';
-import '../widgets/spot_info_sheet.dart';
-import '../widgets/filter_sheet.dart';
+
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);

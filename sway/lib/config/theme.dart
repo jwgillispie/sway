@@ -22,14 +22,14 @@ class AppTheme {
       primaryColor: AppColors.primary,
       primaryColorDark: AppColors.primary.withOpacity(0.8),
       primaryColorLight: AppColors.primary.withOpacity(0.2),
-      colorScheme: ColorScheme.light(
+      colorScheme: const ColorScheme.light(
         primary: AppColors.primary,
         secondary: AppColors.secondary,
         background: AppColors.background,
         onBackground: AppColors.text,
       ),
       scaffoldBackgroundColor: AppColors.background,
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.primary,
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
@@ -47,35 +47,35 @@ class AppTheme {
         ),
       ),
       textTheme: TextTheme(
-        headline1: TextStyle(
+        displaySmall: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 28,
           fontWeight: FontWeight.bold,
           color: AppColors.text,
         ),
-        headline2: TextStyle(
+        labelMedium: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 24,
           fontWeight: FontWeight.w600,
           color: AppColors.text,
         ),
-        headline3: TextStyle(
+        labelSmall: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: AppColors.text,
         ),
-        bodyText1: TextStyle(
+        displayLarge: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 16,
           color: AppColors.text,
         ),
-        bodyText2: TextStyle(
+        displayMedium: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 14,
           color: AppColors.text.withOpacity(0.8),
         ),
-        button: TextStyle(
+        labelLarge: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 16,
           fontWeight: FontWeight.w500,
@@ -96,23 +96,23 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.primary,
-          side: BorderSide(color: AppColors.primary),
+          side: const BorderSide(color: AppColors.primary),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: Colors.grey.shade300),
@@ -123,11 +123,11 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.primary),
+          borderSide: const BorderSide(color: AppColors.primary),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.error),
+          borderSide: const BorderSide(color: AppColors.error),
         ),
       ),
       cardTheme: CardTheme(
@@ -145,14 +145,14 @@ class AppTheme {
       primaryColor: AppColors.primary,
       primaryColorDark: AppColors.primary.withOpacity(0.8),
       primaryColorLight: AppColors.primary.withOpacity(0.2),
-      colorScheme: ColorScheme.dark(
+      colorScheme: const ColorScheme.dark(
         primary: AppColors.primary,
         secondary: AppColors.secondary,
         background: Color(0xFF121212),
         onBackground: Colors.white,
       ),
-      scaffoldBackgroundColor: Color(0xFF121212),
-      appBarTheme: AppBarTheme(
+      scaffoldBackgroundColor: const Color(0xFF121212),
+      appBarTheme: const AppBarTheme(
         backgroundColor: Color(0xFF1E1E1E),
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white),
@@ -170,35 +170,35 @@ class AppTheme {
         ),
       ),
       textTheme: TextTheme(
-        headline1: TextStyle(
+        labelMedium: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 28,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
-        headline2: TextStyle(
+        displayMedium: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 24,
           fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
-        headline3: TextStyle(
+        displayLarge: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
-        bodyText1: TextStyle(
+        displaySmall: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 16,
           color: Colors.white,
         ),
-        bodyText2: TextStyle(
+        labelLarge: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 14,
           color: Colors.white.withOpacity(0.8),
         ),
-        button: TextStyle(
+        labelSmall: const TextStyle(
           fontFamily: 'Poppins',
           fontSize: 16,
           fontWeight: FontWeight.w500,
@@ -219,23 +219,23 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.primary,
-          side: BorderSide(color: AppColors.primary),
+          side: const BorderSide(color: AppColors.primary),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Color(0xFF2C2C2C),
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        fillColor: const Color(0xFF2C2C2C),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: Colors.grey.shade700),
@@ -246,16 +246,16 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.primary),
+          borderSide: const BorderSide(color: AppColors.primary),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.error),
+          borderSide: const BorderSide(color: AppColors.error),
         ),
       ),
       cardTheme: CardTheme(
         elevation: 2,
-        color: Color(0xFF2C2C2C),
+        color: const Color(0xFF2C2C2C),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),

@@ -1,9 +1,10 @@
-# lib/ui/screens/explore_screen.dart
+// lib/ui/screens/explore_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sway/blocs/spots/spots_bloc.dart';
 import 'package:sway/config/routes.dart';
 import 'package:sway/data/models/hammock_spot.dart';
+import 'package:sway/ui/screens/home_screen.dart';
 import 'package:sway/ui/widgets/spot_card.dart';
 import 'package:sway/ui/widgets/section_header.dart';
 import 'package:sway/ui/widgets/error_view.dart';
@@ -75,12 +76,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     SizedBox(height: 16),
                     Text(
                       'No hammock spots yet',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.displayMedium,
                     ),
                     SizedBox(height: 8),
                     Text(
                       'Be the first to add a spot!',
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: Theme.of(context).textTheme.displaySmall,
                     ),
                     SizedBox(height: 24),
                     ElevatedButton.icon(
@@ -325,7 +326,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             SizedBox(height: 8),
             Text(
               title,
-              style: Theme.of(context).textTheme.subtitle1?.copyWith(
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),

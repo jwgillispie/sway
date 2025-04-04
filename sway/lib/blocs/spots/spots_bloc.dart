@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:sway/data/models/hammock_spot.dart';
+import 'package:sway/data/models/review.dart';
 import 'package:sway/data/repositories/spot_repository.dart';
 
 // Events

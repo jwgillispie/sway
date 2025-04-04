@@ -29,13 +29,13 @@ class ErrorView extends StatelessWidget {
             SizedBox(height: 16),
             Text(
               'Oops! Something went wrong',
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.displayMedium,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 8),
             Text(
               message,
-              style: Theme.of(context).textTheme.bodyText2,
+              style: Theme.of(context).textTheme.displayLarge,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 24),

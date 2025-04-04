@@ -11,6 +11,8 @@
 .svn/
 .swiftpm/
 migrate_working_dir/
+*sway-6f710-firebase-adminsdk-fbsvc-79fde50652.json
+*plist
 
 # IntelliJ related
 *.iml

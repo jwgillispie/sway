@@ -7,9 +7,9 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from models import User
 
 # Initialize Firebase with service account
-cred = credentials.Certificate("path/to/serviceAccountKey.json")
+cred = credentials.Certificate("/Users/jordangillispie/development/sway/sway/sway/sway-6f710-firebase-adminsdk-fbsvc-79fde50652.json")
 firebase_app = firebase_admin.initialize_app(cred, {
-    'storageBucket': 'hammock-spots-app.appspot.com'
+    'storageBucket': 'sway-6f710.appspot.com'
 })
 
 # Initialize Firebase Storage

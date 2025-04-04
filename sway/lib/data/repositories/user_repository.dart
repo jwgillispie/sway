@@ -6,6 +6,7 @@ import 'package:sway/config/constants.dart';
 import 'package:sway/data/models/user.dart';
 import 'package:sway/data/providers/api_provider.dart';
 import 'package:sway/data/providers/firebase_provider.dart';
+import 'dart:convert';
 
 class UserRepository {
   final ApiProvider _apiProvider;
@@ -103,20 +104,20 @@ class UserRepository {
   }
   
   // User profile methods
-  Future<User> getCurrentUser() async {
-    final userJson = await _secureStorage.read(key: StorageKeys.userProfile);
-    
-    if (userJson != null) {
-      return User.fromJson(Map<String, dynamic>.from(
-        Map.castFrom<String, dynamic, dynamic, dynamic>(
-          jsonDecode(userJson) as Map<dynamic, dynamic>,
-        ),
-      ));
-    }
-    
-    // If not in storage, fetch from API
-    return await _fetchAndStoreUserProfile();
+Future<User> getCurrentUser() async {
+  final userJson = await _secureStorage.read(key: StorageKeys.userProfile);
+  
+  if (userJson != null) {
+    // Fix: Properly cast the map to Map<String, dynamic>
+    final Map<String, dynamic> userData = Map<String, dynamic>.from(
+      jsonDecode(userJson) as Map
+    );
+    return User.fromJson(userData);
   }
+  
+  // If not in storage, fetch from API
+  return await _fetchAndStoreUserProfile();
+}
   
   Future<User> _fetchAndStoreUserProfile() async {
     final response = await _apiProvider.get('${ApiConstants.users}/me');
@@ -196,7 +197,6 @@ class UserRepository {
 }
 
 // Helper method to handle JSON
-import 'dart:convert';
 
 T jsonDecode<T>(String source) {
   return json.decode(source) as T;

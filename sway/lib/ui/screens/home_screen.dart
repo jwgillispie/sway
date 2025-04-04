@@ -1,4 +1,4 @@
-//lib/ui/screens/home_screen.dart
+// lib/ui/screens/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sway/blocs/auth/auth_bloc.dart';
@@ -15,14 +15,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 // This extension allows external screens to control the tab
-extension HomeScreenState on HomeScreen {
+extension HomeScreenExtension on HomeScreen {
+  void switchToTab(int index) {
+    // Find the current state and call its method
+    final state = _HomeScreenState.instance;
+    if (state != null) {
+      state.switchToTab(index);
+    }
+  }
+  
   void switchToMapTab() {
-    final state = _HomeScreenState();
-    state.switchToTab(0);
+    switchToTab(0);
   }
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // Add a static instance to access from extension
+  static _HomeScreenState? instance;
+  
   int _currentIndex = 0;
   
   final List<Widget> _screens = [
@@ -30,6 +40,20 @@ class _HomeScreenState extends State<HomeScreen> {
     ExploreScreen(),
     ProfileScreen(),
   ];
+  
+  @override
+  void initState() {
+    super.initState();
+    instance = this;
+  }
+  
+  @override
+  void dispose() {
+    if (instance == this) {
+      instance = null;
+    }
+    super.dispose();
+  }
   
   void switchToTab(int index) {
     setState(() {

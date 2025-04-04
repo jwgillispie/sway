@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: EdgeInsets.all(24),
+              padding: const EdgeInsets.all(24),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -75,21 +75,21 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: Theme.of(context).colorScheme.primary,
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: Icon(
+                          child: const Icon(
                             Icons.waves,
                             size: 48,
                             color: Colors.white,
                           ),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Text(
                           'Welcome to Sway',
-                          style: Theme.of(context).textTheme.headline4?.copyWith(
+                          style: Theme.of(context).textTheme.displayMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           'Find your perfect hammock spot',
                           style: Theme.of(context).textTheme.displayMedium?.copyWith(
@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   
-                  SizedBox(height: 48),
+                  const SizedBox(height: 48),
                   
                   // Login form
                   Form(
@@ -112,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextFormField(
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Email',
                             prefixIcon: Icon(Icons.email_outlined),
                           ),
@@ -120,14 +120,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';
                             }
-                            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}).hasMatch(value)) {
+                            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
                               return 'Please enter a valid email';
                             }
                             return null;
                           },
                         ),
                         
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         
                         // Password field
                         TextFormField(
@@ -135,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           obscureText: _obscurePassword,
                           decoration: InputDecoration(
                             labelText: 'Password',
-                            prefixIcon: Icon(Icons.lock_outlined),
+                            prefixIcon: const Icon(Icons.lock_outlined),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _obscurePassword
@@ -156,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                         ),
                         
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         
                         // Remember me and forgot password
                         Row(
@@ -172,19 +172,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                     });
                                   },
                                 ),
-                                Text('Remember me'),
+                                const Text('Remember me'),
                               ],
                             ),
                             TextButton(
                               onPressed: () {
                                 // TODO: Implement forgot password
                               },
-                              child: Text('Forgot Password?'),
+                              child: const Text('Forgot Password?'),
                             ),
                           ],
                         ),
                         
-                        SizedBox(height: 24),
+                        const SizedBox(height: 24),
                         
                         // Login button
                         BlocBuilder<AuthBloc, AuthState>(
@@ -197,31 +197,31 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                         ),
                         
-                        SizedBox(height: 24),
+                        const SizedBox(height: 24),
                         
                         // Register link
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Don't have an account?"),
-                            SizedBox(width: 4),
+                            const Text("Don't have an account?"),
+                            const SizedBox(width: 4),
                             TextButton(
                               onPressed: () {
                                 Navigator.of(context).pushNamed(Routes.register);
                               },
-                              child: Text('Sign Up'),
+                              child: const Text('Sign Up'),
                             ),
                           ],
                         ),
                         
-                        SizedBox(height: 24),
+                        const SizedBox(height: 24),
                         
                         // Continue as guest
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pushReplacementNamed(Routes.home);
                           },
-                          child: Text('Continue as Guest'),
+                          child: const Text('Continue as Guest'),
                         ),
                       ],
                     ),

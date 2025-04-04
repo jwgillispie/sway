@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sway/ui/widgets/filter_sheet.dart';
+import 'package:sway/ui/widgets/spots_info_sheet.dart';
 import '../../blocs/spots/spots_bloc.dart';
 import '../../data/models/hammock_spot.dart';
 

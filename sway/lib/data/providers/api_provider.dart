@@ -10,9 +10,9 @@ class ApiProvider {
   ApiProvider() {
     _dio.options.baseUrl = ApiConstants.baseApiUrl;
     _dio.options.connectTimeout =
-        Duration(milliseconds: ApiConstants.connectTimeout);
+        const Duration(milliseconds: ApiConstants.connectTimeout);
     _dio.options.receiveTimeout =
-        Duration(milliseconds: ApiConstants.receiveTimeout);
+        const Duration(milliseconds: ApiConstants.receiveTimeout);
     _dio.options.headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -54,7 +54,9 @@ class ApiProvider {
       );
       return response;
     } catch (e) {
-      throw _handleError(e);
+      // Fix: Use the result from _handleError but ensure it's not null
+      final error = _handleError(e);
+      throw error;
     }
   }
 
@@ -74,7 +76,8 @@ class ApiProvider {
       );
       return response;
     } catch (e) {
-      throw _handleError(e);
+      final error = _handleError(e);
+      throw error;
     }
   }
 
@@ -94,7 +97,8 @@ class ApiProvider {
       );
       return response;
     } catch (e) {
-      throw _handleError(e);
+      final error = _handleError(e);
+      throw error;
     }
   }
 
@@ -114,7 +118,8 @@ class ApiProvider {
       );
       return response;
     } catch (e) {
-      throw _handleError(e);
+      final error = _handleError(e);
+      throw error;
     }
   }
 
@@ -134,7 +139,8 @@ class ApiProvider {
       );
       return response;
     } catch (e) {
-      throw _handleError(e);
+      final error = _handleError(e);
+      throw error;
     }
   }
 
@@ -154,7 +160,8 @@ class ApiProvider {
       );
       return response;
     } catch (e) {
-      throw _handleError(e);
+      final error = _handleError(e);
+      throw error;
     }
   }
 
@@ -176,12 +183,13 @@ class ApiProvider {
       );
       return response;
     } catch (e) {
-      throw _handleError(e);
+      final error = _handleError(e);
+      throw error;
     }
   }
 
   // Error handling
-  Object? _handleError(dynamic error) {
+  Exception _handleError(dynamic error) {
     if (error is DioException) {
       switch (error.type) {
         case DioExceptionType.connectionTimeout:
@@ -221,7 +229,6 @@ class ApiProvider {
           if (error.error is Exception) {
             return error.error as Exception; // Cast to Exception type
           }
-          return Exception('An unexpected error occurred: ${error.error}');
           return Exception('An unexpected error occurred: ${error.error}');
 
         default:

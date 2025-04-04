@@ -1,4 +1,4 @@
-# lib/ui/screens/profile_screen.dart
+// lib/ui/screens/profile_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sway/blocs/auth/auth_bloc.dart';
@@ -6,6 +6,7 @@ import 'package:sway/blocs/spots/spots_bloc.dart';
 import 'package:sway/config/routes.dart';
 import 'package:sway/data/models/user.dart';
 import 'package:sway/data/models/hammock_spot.dart';
+import 'package:sway/ui/screens/home_screen.dart';
 import 'package:sway/ui/widgets/spot_card.dart';
 import 'package:sway/ui/widgets/custom_button.dart';
 import 'package:sway/ui/widgets/error_view.dart';
@@ -95,13 +96,13 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             SizedBox(height: 24),
             Text(
               'You\'re browsing as a guest',
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.displayLarge,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 8),
             Text(
               'Sign in to create and save your favorite hammock spots',
-              style: Theme.of(context).textTheme.bodyText2,
+              style: Theme.of(context).textTheme.displayMedium,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 24),
@@ -185,12 +186,12 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                               children: [
                                 Text(
                                   user.username,
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context).textTheme.displayMedium,
                                 ),
                                 SizedBox(height: 4),
                                 Text(
                                   user.email,
-                                  style: Theme.of(context).textTheme.bodyText2,
+                                  style: Theme.of(context).textTheme.displayMedium,
                                 ),
                                 if (user.isPremium)
                                   Chip(
@@ -218,7 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                           ),
                           child: Text(
                             user.bio!,
-                            style: Theme.of(context).textTheme.bodyText2,
+                            style: Theme.of(context).textTheme.displayMedium,
                           ),
                         ),
                         SizedBox(height: 16),
@@ -330,7 +331,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                 SizedBox(height: 16),
                                 Text(
                                   'You haven\'t added any spots yet',
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context).textTheme.displayLarge,
                                 ),
                                 SizedBox(height: 16),
                                 CustomButton(
@@ -406,12 +407,12 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                                 SizedBox(height: 16),
                                 Text(
                                   'No favorite spots yet',
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context).textTheme.displayLarge,
                                 ),
                                 SizedBox(height: 8),
                                 Text(
                                   'Tap the heart icon on any spot you like',
-                                  style: Theme.of(context).textTheme.bodyText2,
+                                  style: Theme.of(context).textTheme.displayLarge,
                                 ),
                                 SizedBox(height: 16),
                                 CustomButton(

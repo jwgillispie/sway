@@ -14,7 +14,7 @@ from routes.reviews import review_router
 # Create FastAPI app
 app = FastAPI(
     title="Hammock Spots API",
-    description="API for finding perfect hammock spots in Malta",
+    description="API for finding perfect hammock spots",
     version="1.0.0",
 )
 

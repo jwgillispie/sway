@@ -1,5 +1,6 @@
 // lib/app.dart
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sway/blocs/auth/auth_bloc.dart';
 import 'package:sway/config/routes.dart';
@@ -7,6 +8,7 @@ import 'package:sway/config/theme.dart';
 import 'package:sway/ui/screens/splash_screen.dart';
 import 'package:sway/ui/screens/auth/login_screen.dart';
 import 'package:sway/ui/screens/home_screen.dart';
+import 'package:sway/web/landing_page.dart';
 
 class SwayApp extends StatelessWidget {
   @override
@@ -17,9 +19,10 @@ class SwayApp extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      initialRoute: Routes.splash,
+      initialRoute: kIsWeb ? null : Routes.splash,
       routes: Routes.routes,
-      home: BlocBuilder<AuthBloc, AuthState>(
+      // For web, use the landing page as the initial screen
+      home: kIsWeb ? LandingPage() : BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           if (state is AuthInitial) {
             return SplashScreen();
@@ -32,6 +35,11 @@ class SwayApp extends StatelessWidget {
           return LoginScreen();
         },
       ),
+      // Custom page route generator for named routes
+      onGenerateRoute: (settings) {
+        // Let the Routes class handle generating routes
+        return Routes.generateRoute(settings);
+      },
     );
   }
 }

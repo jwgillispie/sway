@@ -1,12 +1,9 @@
+// lib/web/landing_page.dart - Modified version
 import 'package:flutter/material.dart';
 import 'package:sway/config/theme.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:sway/config/routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sway/blocs/auth/auth_bloc.dart';
-import 'package:sway/data/repositories/user_repository.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -39,27 +36,24 @@ class _LandingPageState extends State<LandingPage> {
       _isSubmitting = true;
     });
 
-    // TODO: Implement email collection logic
-    // This could be:
-    // 1. Send to a backend API
-    // 2. Use a service like Mailchimp
-    // 3. Store in a database
-    await Future.delayed(const Duration(seconds: 2));
+    // Implement early access waitlist collection
+    // This could be a simple API call to store the email in a database
+    await Future.delayed(const Duration(seconds: 1));
 
     setState(() {
       _isSubmitting = false;
     });
 
-    // Show success dialog
-    _showSuccessDialog();
+    _showSuccessDialog("Thanks for your interest!", 
+      "We've added you to our early access waitlist. We'll notify you when the app is ready to launch!");
   }
 
-  void _showSuccessDialog() {
+  void _showSuccessDialog(String title, String message) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Thanks for your interest!'),
-        content: const Text('We\'ll keep you updated about Sway.'),
+        title: Text(title),
+        content: Text(message),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -113,7 +107,16 @@ class _LandingPageState extends State<LandingPage> {
       // Wait for auth state to change
       await Future.delayed(const Duration(seconds: 1));
 
-      // Handle navigation in BlocListener
+      // Show account created success message
+      _showSuccessDialog(
+        "Account Created Successfully!",
+        "Your account has been registered. You'll be among the first to know when the app launches!"
+      );
+      
+      setState(() {
+        _isSubmitting = false;
+        _showSignUpForm = false;
+      });
     } catch (e) {
       setState(() {
         _authError = e.toString();
@@ -146,7 +149,16 @@ class _LandingPageState extends State<LandingPage> {
       // Wait for auth state to change
       await Future.delayed(const Duration(seconds: 1));
 
-      // Handle navigation in BlocListener
+      // Show login success
+      _showSuccessDialog(
+        "Login Successful!",
+        "You've successfully logged in. The app is currently in development and will be available soon!"
+      );
+      
+      setState(() {
+        _isSubmitting = false;
+        _showLoginForm = false;
+      });
     } catch (e) {
       setState(() {
         _authError = e.toString();
@@ -155,255 +167,242 @@ class _LandingPageState extends State<LandingPage> {
     }
   }
 
-  void _launchAppStore(String platform) async {
-    // TODO: Replace with actual app store links when available
-    final urls = {
-      'ios': Uri.parse('https://apps.apple.com/app/sway-hammock-spots'),
-      'android': Uri.parse('https://play.google.com/store/apps/details?id=com.sway.hammockspots'),
-    };
-
-    final url = urls[platform];
-    if (url != null && await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
-      // Since you don't have an app in the store yet, you can show a dialog
-      // explaining that the app is coming soon
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Coming Soon!'),
-          content: const Text('Sway will be available in app stores soon. Thanks for your interest!'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is AuthAuthenticated) {
-          setState(() {
-            _isSubmitting = false;
-          });
-          Navigator.of(context).pushReplacementNamed(Routes.home);
-        } else if (state is AuthFailure) {
-          setState(() {
-            _authError = state.message;
-            _isSubmitting = false;
-          });
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            TextButton(
-              onPressed: _toggleLoginForm,
-              child: const Text(
-                'Login',
-                style: TextStyle(color: Colors.white),
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          TextButton(
+            onPressed: _toggleLoginForm,
+            child: const Text(
+              'Login',
+              style: TextStyle(color: Colors.white),
             ),
-            TextButton(
-              onPressed: _toggleSignUpForm,
-              child: const Text(
-                'Sign Up',
-                style: TextStyle(color: Colors.white),
-              ),
+          ),
+          TextButton(
+            onPressed: _toggleSignUpForm,
+            child: const Text(
+              'Sign Up',
+              style: TextStyle(color: Colors.white),
             ),
-          ],
-        ),
-        extendBodyBehindAppBar: true,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Hero Section
-              Container(
-                height: MediaQuery.of(context).size.height,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      AppColors.primary,
-                      AppColors.primary.withOpacity(0.7),
-                    ],
-                  ),
-                ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.waves,
-                        size: 100,
-                        color: Colors.white,
-                      ),
-                      const SizedBox(height: 24),
-                      const Text(
-                        'Sway: Discover Hammock Spots',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'Find your perfect hammock paradise',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 24,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 48),
-                      
-                      if (_showSignUpForm) ...[
-                        _buildSignUpForm(),
-                      ] else if (_showLoginForm) ...[
-                        _buildLoginForm(),
-                      ] else ...[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ElevatedButton.icon(
-                              icon: const Icon(Icons.apple),
-                              label: const Text('App Store'),
-                              onPressed: () => _launchAppStore('ios'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.black,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 24,
-                                  vertical: 16,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            ElevatedButton.icon(
-                              icon: const Icon(Icons.android),
-                              label: const Text('Google Play'),
-                              onPressed: () => _launchAppStore('android'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 24,
-                                  vertical: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 48),
-                        Container(
-                          width: 500,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: TextField(
-                                  controller: _emailController,
-                                  decoration: InputDecoration(
-                                    fillColor: Colors.white,
-                                    filled: true,
-                                    hintText: 'Enter your email for updates',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              ElevatedButton(
-                                onPressed: _isSubmitting ? null : _submitEmail,
-                                child: _isSubmitting
-                                    ? const CircularProgressIndicator(
-                                        color: Colors.white,
-                                      )
-                                    : const Text('Notify Me'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.secondary,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                    vertical: 16,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ),
-
-              // Features Section
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 50),
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    const Text(
-                      'Explore. Discover. Relax.',
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.text,
-                      ),
-                    ),
-                    const SizedBox(height: 48),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildFeatureCard(
-                          icon: Icons.map,
-                          title: 'Interactive Map',
-                          description: 'Find hammock spots with our intuitive map interface.',
-                        ),
-                        const SizedBox(width: 24),
-                        _buildFeatureCard(
-                          icon: Icons.people_sharp,
-                          title: 'Community Driven',
-                          description: 'Discover and share spots recommended by real hammock enthusiasts.',
-                        ),
-                        const SizedBox(width: 24),
-                        _buildFeatureCard(
-                          icon: Icons.camera_alt,
-                          title: 'Photo Reviews',
-                          description: 'See real photos and detailed reviews of each hammock location.',
-                        ),
-                      ],
-                    ),
+          ),
+        ],
+      ),
+      extendBodyBehindAppBar: true,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Hero Section
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppColors.primary,
+                    AppColors.primary.withOpacity(0.7),
                   ],
                 ),
               ),
-
-              // Footer
-              Container(
-                color: AppColors.primary,
-                padding: const EdgeInsets.symmetric(vertical: 50),
-                child: const Center(
-                  child: Text(
-                    '© 2025 Sway. All rights reserved.',
-                    style: TextStyle(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.waves,
+                      size: 100,
                       color: Colors.white,
-                      fontSize: 16,
                     ),
+                    const SizedBox(height: 24),
+                    const Text(
+                      'Sway: Discover Hammock Spots',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Find your perfect hammock paradise',
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 24,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Coming Soon to iOS and Android',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 48),
+                    
+                    if (_showSignUpForm) ...[
+                      _buildSignUpForm(),
+                    ] else if (_showLoginForm) ...[
+                      _buildLoginForm(),
+                    ] else ...[
+                      Container(
+                        width: 500,
+                        child: Column(
+                          children: [
+                            Text(
+                              'Join the waitlist to be notified when we launch',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 24),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: _emailController,
+                                    decoration: InputDecoration(
+                                      fillColor: Colors.white,
+                                      filled: true,
+                                      hintText: 'Enter your email',
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                ElevatedButton(
+                                  onPressed: _isSubmitting ? null : _submitEmail,
+                                  child: _isSubmitting
+                                      ? const CircularProgressIndicator(
+                                          color: Colors.white,
+                                        )
+                                      : const Text('Join Waitlist'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.secondary,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 24,
+                                      vertical: 16,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+
+            // Features Section
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 50),
+              color: Colors.white,
+              child: Column(
+                children: [
+                  const Text(
+                    'Explore. Discover. Relax.',
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.text,
+                    ),
+                  ),
+                  const SizedBox(height: 48),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildFeatureCard(
+                        icon: Icons.map,
+                        title: 'Interactive Map',
+                        description: 'Find hammock spots with our intuitive map interface.',
+                      ),
+                      const SizedBox(width: 24),
+                      _buildFeatureCard(
+                        icon: Icons.people_sharp,
+                        title: 'Community Driven',
+                        description: 'Discover and share spots recommended by real hammock enthusiasts.',
+                      ),
+                      const SizedBox(width: 24),
+                      _buildFeatureCard(
+                        icon: Icons.camera_alt,
+                        title: 'Photo Reviews',
+                        description: 'See real photos and detailed reviews of each hammock location.',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Coming Soon Section
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 50),
+              color: Colors.grey[100],
+              child: Column(
+                children: [
+                  const Text(
+                    'App Under Development',
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.text,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'We\'re hard at work building the Sway app. Create an account now to be the first to know when we launch!',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 32),
+                  ElevatedButton(
+                    onPressed: _toggleSignUpForm,
+                    child: const Text('Create an Account'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Footer
+            Container(
+              color: AppColors.primary,
+              padding: const EdgeInsets.symmetric(vertical: 50),
+              child: const Center(
+                child: Text(
+                  '© 2025 Sway. All rights reserved.',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -433,6 +432,14 @@ class _LandingPageState extends State<LandingPage> {
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: AppColors.text,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Join our waitlist for early access',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey,
             ),
           ),
           const SizedBox(height: 24),
@@ -483,7 +490,7 @@ class _LandingPageState extends State<LandingPage> {
                   ? const CircularProgressIndicator(
                       color: Colors.white,
                     )
-                  : const Text('Sign Up'),
+                  : const Text('Create Account'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 padding: const EdgeInsets.symmetric(vertical: 16),

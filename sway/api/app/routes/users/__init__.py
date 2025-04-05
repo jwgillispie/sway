@@ -1,4 +1,4 @@
-# app/routes/spots/__init__.py
-from .router import spot_router
+# app/routes/users/__init__.py
+from .router import user_router
 
-__all__ = ['spot_router']
+__all__ = ['user_router']

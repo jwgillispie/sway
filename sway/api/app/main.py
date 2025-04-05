@@ -1,15 +1,16 @@
-# api/app/main.py
-import os
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+# app/main.py
+from fastapi import FastAPI
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
+import os
 
 # Import models and routers
-from models import HammockSpot, User, Review
-from routes.spots import spot_router
-from routes.users import user_router
-from routes.reviews import review_router
+from app.models.hammock_spot import HammockSpot
+from app.models.user import User
+from app.models.review import Review
+from app.routes.spots.router import spot_router
+from app.routes.users.router import user_router
+from app.routes.reviews.router import review_router
 
 # Create FastAPI app
 app = FastAPI(
@@ -18,20 +19,10 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# Configure CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # For development - restrict in production
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 # Register routers
 app.include_router(spot_router)
 app.include_router(user_router)
 app.include_router(review_router)
-
 
 @app.on_event("startup")
 async def startup_db_client():
@@ -51,27 +42,14 @@ async def startup_db_client():
         print("Connected to MongoDB!")
     except Exception as e:
         print(f"Failed to connect to MongoDB: {e}")
-        raise HTTPException(status_code=500, detail="Database connection failed")
-
+        raise
 
 @app.get("/")
 async def root():
     """Root endpoint for health check"""
     return {"message": "Welcome to Hammock Spots API!", "status": "online"}
 
-
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
     return {"status": "healthy"}
-
-
-if __name__ == "__main__":
-    import uvicorn
-    
-    uvicorn.run(
-        "main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True
-    )

@@ -1,6 +1,7 @@
 // lib/config/constants.dart
 class ApiConstants {
-  static const String baseUrl = 'https://api.sway-app.com';
+static const String baseUrl = 'http://localhost:8000'; // For web or iOS simulator
+
   static const String apiVersion = '/v1';
   static const String baseApiUrl = baseUrl + apiVersion;
   

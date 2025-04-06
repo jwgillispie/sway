@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
+from fastapi.middleware.cors import CORSMiddleware
 
 # Import models and routers
 from app.models.hammock_spot import HammockSpot
@@ -17,6 +18,15 @@ app = FastAPI(
     title="Hammock Spots API",
     description="API for finding perfect hammock spots",
     version="1.0.0",
+)
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Your Firebase hosting URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Register routers

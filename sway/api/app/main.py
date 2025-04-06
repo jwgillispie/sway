@@ -1,5 +1,5 @@
 # app/main.py
-from fastapi import FastAPI
+from fastapi import FastAPI, APIRouter
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
@@ -23,16 +23,22 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Your Firebase hosting URL
+    allow_origins=["*"],  # Allow all origins for development
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Register routers
-app.include_router(spot_router)
-app.include_router(user_router)
-app.include_router(review_router)
+# Create a versioned API router
+v1_router = APIRouter(prefix="/v1")
+
+# Include routers with versioning
+v1_router.include_router(spot_router)
+v1_router.include_router(user_router)
+v1_router.include_router(review_router)
+
+# Add versioned router to app
+app.include_router(v1_router)
 
 @app.on_event("startup")
 async def startup_db_client():

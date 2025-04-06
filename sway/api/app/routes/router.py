@@ -6,9 +6,9 @@ from firebase_admin import auth
 from dependencies import get_current_user
 
 # Initialize routers
-spot_router = APIRouter(prefix="/spots/", tags=["spots"])
-user_router = APIRouter(prefix="/users/", tags=["users"])
-review_router = APIRouter(prefix="/reviews/", tags=["reviews"])
+spot_router = APIRouter(prefix="/spots", tags=["spots"])
+user_router = APIRouter(prefix="/users", tags=["users"])
+review_router = APIRouter(prefix="/reviews", tags=["reviews"])
 
 
 # Spot endpoints

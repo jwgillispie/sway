@@ -1,14 +1,18 @@
 // lib/config/constants.dart
 class ApiConstants {
-static const String baseUrl = 'http://localhost:8000'; // For web or iOS simulator
-
+  // For local development
+  static const String baseUrl = 'http://localhost:8000'; 
+  
+  // For production
+  // static const String baseUrl = 'https://api.sway-app.com';
+  
   static const String apiVersion = '/v1';
   static const String baseApiUrl = baseUrl + apiVersion;
   
   static const int connectTimeout = 15000; // 15 seconds
   static const int receiveTimeout = 15000; // 15 seconds
   
-  // Endpoints
+  // Endpoints - these match the router prefixes in your FastAPI app
   static const String spots = '/spots';
   static const String users = '/users';
   static const String reviews = '/reviews';

@@ -1,12 +1,12 @@
 // lib/data/repositories/user_repository.dart
 import 'dart:io';
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sway/config/constants.dart';
 import 'package:sway/data/models/user.dart';
 import 'package:sway/data/providers/api_provider.dart';
 import 'package:sway/data/providers/firebase_provider.dart';
-import 'dart:convert';
 
 class UserRepository {
   final ApiProvider _apiProvider;
@@ -24,6 +24,7 @@ class UserRepository {
 
   Future<void> signIn({required String email, required String password}) async {
     try {
+      print('Attempting to sign in with Firebase');
       // Sign in with Firebase
       final credentials = await _firebaseProvider.signInWithEmailAndPassword(
         email,
@@ -37,6 +38,7 @@ class UserRepository {
         throw Exception('Failed to get authentication token');
       }
 
+      print('Got Firebase ID token, saving to secure storage');
       // Store token in secure storage
       await _secureStorage.write(key: StorageKeys.authToken, value: idToken);
 
@@ -46,9 +48,11 @@ class UserRepository {
         value: credentials.user?.uid,
       );
 
+      print('Fetching user profile from API');
       // Fetch user profile from API
       await _fetchAndStoreUserProfile();
     } catch (e) {
+      print('Error during sign in: $e');
       // Clean up in case of error
       await _secureStorage.delete(key: StorageKeys.authToken);
       await _secureStorage.delete(key: StorageKeys.userId);
@@ -62,6 +66,7 @@ class UserRepository {
     required String username,
   }) async {
     try {
+      print('Creating user with Firebase');
       // Create user with Firebase
       final credentials =
           await _firebaseProvider.createUserWithEmailAndPassword(
@@ -69,6 +74,7 @@ class UserRepository {
         password,
       );
 
+      print('Updating Firebase profile with username');
       // Update display name
       await _firebaseProvider.updateProfile(displayName: username);
 
@@ -79,6 +85,7 @@ class UserRepository {
         throw Exception('Failed to get authentication token');
       }
 
+      print('Got Firebase ID token, saving to secure storage');
       // Store token in secure storage
       await _secureStorage.write(key: StorageKeys.authToken, value: idToken);
 
@@ -89,9 +96,10 @@ class UserRepository {
       );
 
       // Create user profile in API
-      print("about to sign up user with api");
+      print('Creating user profile with API');
       await _createUserProfile(username: username);
     } catch (e) {
+      print('Error during sign up: $e');
       // Clean up in case of error
       await _secureStorage.delete(key: StorageKeys.authToken);
       await _secureStorage.delete(key: StorageKeys.userId);
@@ -108,50 +116,73 @@ class UserRepository {
 
   // User profile methods
   Future<User> getCurrentUser() async {
+    print('Getting current user profile');
     final userJson = await _secureStorage.read(key: StorageKeys.userProfile);
 
     if (userJson != null) {
-      // Fix: Properly cast the map to Map<String, dynamic>
+      print('Found user profile in secure storage');
+      // Properly cast the map to Map<String, dynamic>
       final Map<String, dynamic> userData =
           Map<String, dynamic>.from(jsonDecode(userJson) as Map);
       return User.fromJson(userData);
     }
 
+    print('User profile not in storage, fetching from API');
     // If not in storage, fetch from API
     return await _fetchAndStoreUserProfile();
   }
 
   Future<User> _fetchAndStoreUserProfile() async {
-    final response = await _apiProvider.get('${ApiConstants.users}/me');
-    final user = User.fromJson(response.data);
+    try {
+      print('Fetching user profile from API endpoint: ${ApiConstants.users}/me');
+      final response = await _apiProvider.get('${ApiConstants.users}/me');
+      print('Response received: ${response.statusCode}');
+      
+      final user = User.fromJson(response.data);
 
-    // Store user profile in secure storage
-    await _secureStorage.write(
-      key: StorageKeys.userProfile,
-      value: jsonEncode(user.toJson()),
-    );
+      // Store user profile in secure storage
+      await _secureStorage.write(
+        key: StorageKeys.userProfile,
+        value: jsonEncode(user.toJson()),
+      );
 
-    return user;
+      return user;
+    } catch (e) {
+      print('Error fetching user profile: $e');
+      rethrow;
+    }
   }
 
   Future<void> _createUserProfile({required String username}) async {
-    final userId = await _secureStorage.read(key: StorageKeys.userId);
+    try {
+      final userId = await _secureStorage.read(key: StorageKeys.userId);
+      
+      if (userId == null) {
+        throw Exception('User ID not found');
+      }
 
-    if (userId == null) {
-      throw Exception('User ID not found');
+      final firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
+      if (firebaseUser == null) {
+        throw Exception('Firebase user not found');
+      }
+
+      // Create user profile in API
+      print('Creating user profile with API endpoint: ${ApiConstants.users}');
+      final userData = {
+        'firebase_uid': userId,
+        'username': username,
+        'email': firebaseUser.email ?? '',
+      };
+
+      final response = await _apiProvider.post(ApiConstants.users, data: userData);
+      print('User profile creation response: ${response.statusCode}');
+
+      // Fetch and store user profile
+      await _fetchAndStoreUserProfile();
+    } catch (e) {
+      print('Error creating user profile: $e');
+      rethrow;
     }
-
-    // Create user profile in API
-    final userData = {
-      'firebase_uid': userId,
-      'username': username,
-      'email': firebase_auth.FirebaseAuth.instance.currentUser?.email,
-    };
-
-    await _apiProvider.post(ApiConstants.users, data: userData);
-
-    // Fetch and store user profile
-    await _fetchAndStoreUserProfile();
   }
 
   Future<User> updateUserProfile({
@@ -184,6 +215,7 @@ class UserRepository {
   }
 
   Future<void> toggleFavoriteSpot(String spotId) async {
+    print('Adding favorite spot: $spotId');
     await _apiProvider.post('${ApiConstants.users}/favorites/$spotId');
 
     // Refresh user profile
@@ -191,19 +223,10 @@ class UserRepository {
   }
 
   Future<void> removeFavoriteSpot(String spotId) async {
+    print('Removing favorite spot: $spotId');
     await _apiProvider.delete('${ApiConstants.users}/favorites/$spotId');
 
     // Refresh user profile
     await _fetchAndStoreUserProfile();
   }
-}
-
-// Helper method to handle JSON
-
-T jsonDecode<T>(String source) {
-  return json.decode(source) as T;
-}
-
-String jsonEncode(Object object) {
-  return json.encode(object);
 }

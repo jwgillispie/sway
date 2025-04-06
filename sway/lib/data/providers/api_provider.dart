@@ -27,9 +27,15 @@ class ApiProvider {
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
           }
+          print('Making request to: ${options.baseUrl}${options.path}');
           return handler.next(options);
         },
+        onResponse: (response, handler) {
+          print('Received response from: ${response.requestOptions.path} - Status: ${response.statusCode}');
+          return handler.next(response);
+        },
         onError: (DioException e, handler) {
+          print('Error making request to: ${e.requestOptions.path} - ${e.message}');
           // Handle 401 unauthorized errors
           if (e.response?.statusCode == 401) {
             // TODO: Implement token refresh or logout logic
@@ -54,7 +60,6 @@ class ApiProvider {
       );
       return response;
     } catch (e) {
-      // Fix: Use the result from _handleError but ensure it's not null
       final error = _handleError(e);
       throw error;
     }
@@ -208,6 +213,9 @@ class ApiProvider {
               if (error.response!.data is Map &&
                   error.response!.data['message'] != null) {
                 errorMessage = error.response!.data['message'];
+              } else if (error.response!.data is Map &&
+                  error.response!.data['detail'] != null) {
+                errorMessage = error.response!.data['detail'];
               } else if (error.response!.data is String) {
                 errorMessage = error.response!.data;
               }

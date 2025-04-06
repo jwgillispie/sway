@@ -1,9 +1,9 @@
-// lib/web/landing_page.dart - Modified version
+// lib/web/landing_page.dart
 import 'package:flutter/material.dart';
-import 'package:sway/config/theme.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sway/blocs/auth/auth_bloc.dart';
+import 'package:sway/config/theme.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -37,15 +37,22 @@ class _LandingPageState extends State<LandingPage> {
     });
 
     // Implement early access waitlist collection
-    // This could be a simple API call to store the email in a database
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      // Store email for waitlist (could add a Firestore collection for this)
+      await Future.delayed(const Duration(seconds: 1));
+      
+      setState(() {
+        _isSubmitting = false;
+      });
 
-    setState(() {
-      _isSubmitting = false;
-    });
-
-    _showSuccessDialog("Thanks for your interest!", 
-      "We've added you to our early access waitlist. We'll notify you when the app is ready to launch!");
+      _showSuccessDialog("Thanks for your interest!", 
+        "We've added you to our early access waitlist. We'll notify you when the app is ready to launch!");
+    } catch (e) {
+      setState(() {
+        _isSubmitting = false;
+        _authError = e.toString();
+      });
+    }
   }
 
   void _showSuccessDialog(String title, String message) {
@@ -217,7 +224,7 @@ class _LandingPageState extends State<LandingPage> {
                       size: 100,
                       color: Colors.white,
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 12),
                     const Text(
                       'Sway: Discover Hammock Spots',
                       style: TextStyle(
@@ -284,11 +291,6 @@ class _LandingPageState extends State<LandingPage> {
                                 const SizedBox(width: 16),
                                 ElevatedButton(
                                   onPressed: _isSubmitting ? null : _submitEmail,
-                                  child: _isSubmitting
-                                      ? const CircularProgressIndicator(
-                                          color: Colors.white,
-                                        )
-                                      : const Text('Join Waitlist'),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.secondary,
                                     padding: const EdgeInsets.symmetric(
@@ -296,6 +298,11 @@ class _LandingPageState extends State<LandingPage> {
                                       vertical: 16,
                                     ),
                                   ),
+                                  child: _isSubmitting
+                                      ? const CircularProgressIndicator(
+                                          color: Colors.white,
+                                        )
+                                      : const Text('Join Waitlist'),
                                 ),
                               ],
                             ),
@@ -322,7 +329,7 @@ class _LandingPageState extends State<LandingPage> {
                       color: AppColors.text,
                     ),
                   ),
-                  const SizedBox(height: 48),
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -331,13 +338,13 @@ class _LandingPageState extends State<LandingPage> {
                         title: 'Interactive Map',
                         description: 'Find hammock spots with our intuitive map interface.',
                       ),
-                      const SizedBox(width: 24),
+                      const SizedBox(width: 16),
                       _buildFeatureCard(
                         icon: Icons.people_sharp,
                         title: 'Community Driven',
                         description: 'Discover and share spots recommended by real hammock enthusiasts.',
                       ),
-                      const SizedBox(width: 24),
+                      const SizedBox(width: 16),
                       _buildFeatureCard(
                         icon: Icons.camera_alt,
                         title: 'Photo Reviews',
@@ -375,7 +382,6 @@ class _LandingPageState extends State<LandingPage> {
                   const SizedBox(height: 32),
                   ElevatedButton(
                     onPressed: _toggleSignUpForm,
-                    child: const Text('Create an Account'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
                       padding: const EdgeInsets.symmetric(
@@ -383,6 +389,7 @@ class _LandingPageState extends State<LandingPage> {
                         vertical: 16,
                       ),
                     ),
+                    child: const Text('Create an Account'),
                   ),
                 ],
               ),
@@ -486,15 +493,15 @@ class _LandingPageState extends State<LandingPage> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: _isSubmitting ? null : _signUp,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
               child: _isSubmitting
                   ? const CircularProgressIndicator(
                       color: Colors.white,
                     )
                   : const Text('Create Account'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
             ),
           ),
           const SizedBox(height: 16),
@@ -568,15 +575,15 @@ class _LandingPageState extends State<LandingPage> {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: _isSubmitting ? null : _login,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
               child: _isSubmitting
                   ? const CircularProgressIndicator(
                       color: Colors.white,
                     )
                   : const Text('Log In'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
             ),
           ),
           const SizedBox(height: 16),

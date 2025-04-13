@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sway/blocs/auth/auth_bloc.dart';
 import 'package:sway/config/routes.dart';
 import 'package:sway/config/theme.dart';
+import 'package:sway/screens/landing/landing_page.dart';
 import 'package:sway/ui/screens/splash_screen.dart';
 import 'package:sway/ui/screens/auth/login_screen.dart';
 import 'package:sway/ui/screens/home_screen.dart';
-import 'package:sway/web/landing_page.dart';
 
 class SwayApp extends StatelessWidget {
   @override

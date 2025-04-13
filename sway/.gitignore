@@ -20,6 +20,7 @@ firebase-credentials.json
 *.iws
 .idea/
 .env
+*/lib/firebase_options.dart
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
@@ -35,6 +36,7 @@ firebase-credentials.json
 .pub-cache/
 .pub/
 /build/
+/lib/
 
 # Symbolication related
 app.*.symbols
